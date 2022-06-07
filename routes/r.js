@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 const {generateToken,authenticateToken,authorization} = require('../auth/jwt')
 const managers = require("../db/db")
 const projects = require("../db/db")
-const candidates = require("../db/db")
+const candidates = require("../db/candidates")
 const submissions = require("../db/db")
 
 // MANAGER SIGNUP
@@ -194,6 +194,18 @@ router.post("/candidate_signin",async(req,res)=>{
             res.send("user not found")
             console.log("user not found")
         }
+    }
+    catch(err){
+        res.send({err:err.message})
+        console.log(err)
+    }
+})
+// GET ALL CABDIDATES
+router.get("/candidates",authenticateToken,async (req,res)=>{
+    try{
+        const data = await candidates.find()
+        res.send(data)
+        console.log(data)
     }
     catch(err){
         res.send({err:err.message})
